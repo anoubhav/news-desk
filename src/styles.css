@@ -689,6 +689,7 @@ details summary:focus-visible {
    shell. Mirrors the .factcheck-card styling but compact (one claim, two
    outlets max) so it reads at glance distance like a chyron. */
 .anchor-factcheck-overlay {
+  display: none;
   position: absolute;
   bottom: 80px;
   right: 14px;
