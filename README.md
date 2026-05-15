@@ -1,8 +1,8 @@
 # LiveAvatar Election Desk
 
-> **Three perspectives. One screen.** A real-time AI news studio that puts left, right, and neutral analysis on the same story — with live fact-checking and broadcast-quality highlight reels. Built on Anoki **LiveAvatar** (FULL mode).
+> **Three perspectives. One screen.** A real-time AI news studio that puts left, right, and neutral analysis on the same story — with live fact-checking and broadcast-quality highlight reels. Built on **LiveAvatar** (FULL mode).
 
-![hackathon-build](https://img.shields.io/badge/built-in%2048h-orange) ![liveavatar](https://img.shields.io/badge/Anoki-LiveAvatar%20FULL-7C5CFC) ![status](https://img.shields.io/badge/status-prototype-blue)
+![liveavatar](https://img.shields.io/badge/LiveAvatar-FULL-7C5CFC) ![status](https://img.shields.io/badge/status-prototype-blue)
 
 ## Why
 
@@ -64,7 +64,7 @@ The **spoken pitch + Q&A prep** is at [docs/PITCH.md](docs/PITCH.md).
 
 ```
 ┌────────────┐   WebRTC    ┌──────────────────┐
-│  Browser   │◀───────────▶│ Anoki LiveAvatar │
+│  Browser   │◀───────────▶│    LiveAvatar    │
 │  React UI  │             │   (3 sessions)   │
 └─────┬──────┘             └──────────────────┘
       │ NDJSON
@@ -84,7 +84,7 @@ Full diagram and breakdown in [docs/PROJECT.md](docs/PROJECT.md).
 
 - **Frontend** — React 19, Vite 6, Framer Motion, custom WebGL shader
 - **Backend** — Express, tsx, Zod, NDJSON streaming
-- **Avatars** — Anoki LiveAvatar FULL mode (LiveKit-based WebRTC)
+- **Avatars** — LiveAvatar FULL mode (LiveKit-based WebRTC)
 - **LLM (debate)** — OpenAI `gpt-5.4-mini` with strict JSON-schema outputs
 - **LLM (fact-check + HUD)** — Gemini with native Google Search grounding
 - **Reel composition** — Hyperframes (HTML + GSAP templates rendered to MP4)
@@ -100,10 +100,10 @@ Full diagram and breakdown in [docs/PROJECT.md](docs/PROJECT.md).
 
 ## Project Status
 
-Hackathon prototype. State is in-memory; there's no auth; three anchors are wired in but the system is parameterized for more. See [docs/PROJECT.md](docs/PROJECT.md#known-limits) for the punch list.
+Prototype. State is in-memory; there's no auth; three anchors are wired in but the system is parameterized for more. See [docs/PROJECT.md](docs/PROJECT.md#known-limits) for the punch list.
 
 The previous README (with implementation-status notes) is preserved at [README.legacy.md](README.legacy.md).
 
 ## Credits
 
-Built on **Anoki LiveAvatar** — the real-time avatar streaming API that makes this whole thing possible.
+Built on **LiveAvatar** — the real-time avatar streaming API that makes this whole thing possible.

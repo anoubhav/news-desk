@@ -156,7 +156,7 @@ For the spoken script (no visual direction) see [DEMO_SCRIPT.md](DEMO_SCRIPT.md)
 ## SCENE 7 — Future + Tag (01:55 – 02:05)
 
 **VOICEOVER:**
-> "Next: morning briefings, instant highlights from two-hour rallies. **LiveAvatar Election Desk** — three perspectives, one screen. Built on Anoki LiveAvatar."
+> "Next: morning briefings, instant highlights from two-hour rallies. **LiveAvatar Election Desk** — three perspectives, one screen. Built on LiveAvatar."
 
 **ON-SCREEN ACTION:**
 - **1:55** — Three quick mockup cards flash in sequence (1s each):
@@ -164,7 +164,7 @@ For the spoken script (no visual direction) see [DEMO_SCRIPT.md](DEMO_SCRIPT.md)
   2. A 2-hour political rally video thumbnail with a **"SCRUBBING…"** progress bar, then 5 clip thumbnails popping out labeled **"INSTANT HIGHLIGHTS"**
   3. An RSS feed icon with three perspective-pills branching out
 - **2:00** — Cards dissolve into the brand mark: **LIVEAVATAR ELECTION DESK** in Aurora Display, gold on slate, with the tagline below in Inter Light: *"Three perspectives. One screen."*
-- **2:03** — Sub-line in small caps: **POWERED BY ANOKI LIVEAVATAR**.
+- **2:03** — Sub-line in small caps: **POWERED BY LIVEAVATAR**.
 
 **VISUAL DIRECTION:**
 - The future-work cards should feel *aspirational* — slightly more polished than the live UI, hinting at where the product goes.
@@ -177,7 +177,7 @@ For the spoken script (no visual direction) see [DEMO_SCRIPT.md](DEMO_SCRIPT.md)
 ## Visual Direction Summary (paste-friendly bundle for designer)
 
 ```
-PROJECT: LiveAvatar Election Desk — 2-min hackathon demo
+PROJECT: LiveAvatar Election Desk — 2-min demo
 
 THESIS: News fragmentation creates echo chambers. We show three perspectives on
 one screen, debating the same story in real time.

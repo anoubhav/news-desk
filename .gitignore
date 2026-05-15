@@ -6,6 +6,9 @@ coverage
 .env.local
 .env.*.local
 
+# Hyperframes composition project (ported separately)
+hyperframes/
+
 # IDE / agent scaffolding
 .claude/
 .agents/

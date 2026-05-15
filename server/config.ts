@@ -123,21 +123,21 @@ export const config: AppConfig = {
     anchors: {
       neutral: {
         apiKey: process.env.LIVEAVATAR_NEUTRAL_API_KEY,
-        avatarId: process.env.LIVEAVATAR_NEUTRAL_AVATAR_ID,
+        avatarId: process.env.LIVEAVATAR_NEUTRAL_AVATAR_ID || "073b60a9-89a8-45aa-8902-c358f64d2852",
         voiceId: process.env.LIVEAVATAR_NEUTRAL_VOICE_ID,
         contextId: process.env.LIVEAVATAR_NEUTRAL_CONTEXT_ID,
         contextName: process.env.LIVEAVATAR_NEUTRAL_CONTEXT_NAME,
       },
       left: {
         apiKey: process.env.LIVEAVATAR_LEFT_API_KEY,
-        avatarId: process.env.LIVEAVATAR_LEFT_AVATAR_ID,
+        avatarId: process.env.LIVEAVATAR_LEFT_AVATAR_ID || "b6c94c07-e4e5-483e-8bec-e838d5910b7d",
         voiceId: process.env.LIVEAVATAR_LEFT_VOICE_ID,
         contextId: process.env.LIVEAVATAR_LEFT_CONTEXT_ID,
         contextName: process.env.LIVEAVATAR_LEFT_CONTEXT_NAME,
       },
       right: {
         apiKey: process.env.LIVEAVATAR_RIGHT_API_KEY,
-        avatarId: process.env.LIVEAVATAR_RIGHT_AVATAR_ID,
+        avatarId: process.env.LIVEAVATAR_RIGHT_AVATAR_ID || "0930fd59-c8ad-434d-ad53-b391a1768720",
         voiceId: process.env.LIVEAVATAR_RIGHT_VOICE_ID,
         contextId: process.env.LIVEAVATAR_RIGHT_CONTEXT_ID,
         contextName: process.env.LIVEAVATAR_RIGHT_CONTEXT_NAME,

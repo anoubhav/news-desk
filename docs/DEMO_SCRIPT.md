@@ -43,7 +43,7 @@ For scene-by-scene visual direction (color, motion, typography, transitions) see
 ### [01:55 – 02:05]  FUTURE + TAG
 **ON SCREEN:** Quick mockup flashes — "Morning Briefing" notification → 2-hour rally video → instant highlight clips popping out. Cut to the desk view + logo.
 **YOU:**
-> "Next: morning briefings, instant highlights from two-hour rallies. **LiveAvatar Election Desk** — three perspectives, one screen. Built on Anoki LiveAvatar."
+> "Next: morning briefings, instant highlights from two-hour rallies. **LiveAvatar Election Desk** — three perspectives, one screen. Built on LiveAvatar."
 
 ---
 

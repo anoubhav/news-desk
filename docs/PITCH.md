@@ -4,7 +4,7 @@
 
 > "When I switch from Fox to MSNBC to a late-night show, the same story can feel like three different countries. We're stuck in echo chambers. So I built **LiveAvatar Election Desk** — three AI anchors on one screen: a left-leaning analyst, a right-leaning analyst, and a neutral moderator.
 >
-> You drop in any article URL — or pull from an RSS feed, or a live news feed. The desk reads it, generates left and right framings, and the panel debates it on camera. The avatars are powered by **Anoki's LiveAvatar in FULL mode** — real WebRTC video, sub-second response time, separate sessions per anchor.
+> You drop in any article URL — or pull from an RSS feed, or a live news feed. The desk reads it, generates left and right framings, and the panel debates it on camera. The avatars are powered by **LiveAvatar in FULL mode** — real WebRTC video, sub-second response time, separate sessions per anchor.
 >
 > The trick that makes it feel alive: an LLM watches the transcript and **decides who speaks next** based on who was challenged, who's been quiet, and what hasn't been said. Anchors can't repeat each other — there's a paraphrase guard in the prompt. If a topic exhausts itself, the desk wraps gracefully instead of forcing rounds.
 >
@@ -18,13 +18,13 @@
 
 ## 30-second elevator version
 
-> "News today fragments by network — Fox, MSNBC, late-night — so audiences live in echo chambers. I built **LiveAvatar Election Desk**: three AI anchors on one screen — left, right, and neutral — that debate any article, RSS feed, or live story in real time, with Gemini fact-checking every claim against Google Search. Built on Anoki LiveAvatar. Next: morning briefings and instant highlights from two-hour rallies."
+> "News today fragments by network — Fox, MSNBC, late-night — so audiences live in echo chambers. I built **LiveAvatar Election Desk**: three AI anchors on one screen — left, right, and neutral — that debate any article, RSS feed, or live story in real time, with Gemini fact-checking every claim against Google Search. Built on LiveAvatar. Next: morning briefings and instant highlights from two-hour rallies."
 
 ## One-liners
 
 - "News fragmentation creates echo chambers. I built three AI anchors — left, right, neutral — that debate any story on one screen, with live fact-checking."
 - "Three AI anchors — left, right, neutral — debate any news story in real time, with live fact-checking and a one-click highlight reel."
-- "Anoki LiveAvatar plus orchestrated debate plus Gemini fact-check plus Hyperframes reel. Editorial-grade news desk in 48 hours."
+- "LiveAvatar plus orchestrated debate plus Gemini fact-check plus Hyperframes reel. Editorial-grade news desk in one screen."
 - "Paste a URL. Three avatars argue about it. Gemini fact-checks them. Press a button, get a broadcast clip."
 
 ## The "why this matters" beats
@@ -55,7 +55,7 @@
 > Three differences. First, multi-agent — anchors talk to each other, not to you. Second, the LLM picks turn order based on what was just said, with a paraphrase guard. Third, real-time fact-check feeds back into the next turn. It's an editorial workflow, not a chat.
 
 **Q: How is this different from HeyGen Interactive Avatar?**
-> Anoki LiveAvatar is the underlying tech — but I'm using FULL mode with three concurrent sessions, per-anchor contexts and voices, and orchestration on top. Interactive Avatar is a 1:1 chat surface; this is a multi-anchor production studio.
+> LiveAvatar is the underlying tech — but I'm using FULL mode with three concurrent sessions, per-anchor contexts and voices, and orchestration on top. Interactive Avatar is a 1:1 chat surface; this is a multi-anchor production studio.
 
 **Q: Where does this go next?**
 > Three product surfaces. **Morning briefing** — subscribe to topics, get a 3-minute multi-perspective digest every morning. **RSS / multi-feed ingestion** — point at any feed bundle across the spectrum, get a debate per story. **Instant highlights from long-form events** — drop in a 2-hour political rally or hearing, agents extract the moments worth sharing.
@@ -96,15 +96,12 @@
 > The provider abstraction has a mock mode with full feature parity — sessions, events, transcript, everything except actual video. Useful for tests and offline demos. Token creation also has exponential backoff on 409/429.
 
 **Q: Storage / state?**
-> In-memory only. Hackathon prototype — reload loses transcripts. Adding a persistence layer is on the punch list.
+> In-memory only. Prototype — reload loses transcripts. Adding a persistence layer is on the punch list.
 
 **Q: Tests?**
 > Vitest + jsdom + Testing Library. Coverage on orchestrator, LLM providers, article extraction, fact-check builder, session manager.
 
 ### Business / Differentiation
-
-**Q: How long did this take?**
-> ~48 hours of build time. Possible because LiveAvatar handles the hard parts — avatar generation, real-time WebRTC, voice synthesis. I built editorial logic on top.
 
 **Q: What's the moat?**
 > The orchestration layer — paraphrase guard, speaker bidding, fact-check feedback loop. That's the editorial IP. Avatars and LLMs are commodities; the *flow* between them is the product.
@@ -121,7 +118,7 @@
 
 - "It can do any language." — Currently English voice fallbacks only.
 - "Real-time live news feed." — The adapter exists but needs an upstream API config.
-- "Production-ready." — It's a hackathon prototype with in-memory state.
+- "Production-ready." — It's a prototype with in-memory state.
 - "100 anchors." — System is parameterized but the UI assumes the 3-lens framing.
 
 ---

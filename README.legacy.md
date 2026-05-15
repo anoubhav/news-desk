@@ -18,7 +18,6 @@ The viewer can stage any anchor combination at runtime, and the panel runs throu
 
 ## What Is Implemented
 
-- New workspace at `/home/anokitv/anoubhav/live_avatar`
 - Project-local install of `heygen-com/liveavatar-agent-skills`
 - React front end for:
   - live feed polling and freshness state

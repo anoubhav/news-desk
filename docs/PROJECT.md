@@ -10,7 +10,7 @@ The news ecosystem is fragmented along ideological lines. Tuning into Fox News, 
 
 A real-time, multi-perspective news studio. Stories come from demo packets, any pasted article URL, or a live news feed. The anchors stream over WebRTC, take turns based on an LLM-driven speaker bidding system, and every claim is fact-checked in parallel. Each debate can be exported as a broadcast-quality MP4 highlight reel.
 
-The project is a hackathon build on top of **Anoki LiveAvatar** (FULL mode), demonstrating that LiveAvatar can power editorial-grade live formats, not just one-on-one chat.
+The project is built on top of **LiveAvatar** (FULL mode), demonstrating that LiveAvatar can power editorial-grade live formats, not just one-on-one chat.
 
 ## The User Flow
 
@@ -37,7 +37,7 @@ The project is a hackathon build on top of **Anoki LiveAvatar** (FULL mode), dem
         │              │             │
         ▼              ▼             ▼
    ┌──────────────────────────────────────┐
-   │  Anoki LiveAvatar (FULL mode)        │
+   │        LiveAvatar (FULL mode)        │
    │  separate session per anchor         │
    └──────────────────────────────────────┘
               ▲
@@ -114,7 +114,7 @@ Each has its own LiveAvatar context, fallback voice list, and accent color.
 
 ## Headline Features
 
-### 1. Anoki LiveAvatar FULL-mode integration
+### 1. LiveAvatar FULL-mode integration
 - Three concurrent sessions, one per anchor, each with its own context and voice
 - Per-anchor API key support for isolation
 - Concurrency-safe session token creation with exponential backoff
@@ -217,7 +217,7 @@ PORT=4175
 | Backend | Express + tsx + Zod | Zero-build dev loop, runtime contract safety |
 | LLM (debate) | OpenAI (`gpt-5.4-mini` default) with Gemini fallback | Strict JSON-schema outputs |
 | LLM (fact-check + HUD) | Gemini with native Google Search grounding | Built-in source citations |
-| Avatar | Anoki LiveAvatar FULL mode | Per-anchor contexts, real-time WebRTC |
+| Avatar | LiveAvatar FULL mode | Per-anchor contexts, real-time WebRTC |
 | Streaming | NDJSON over fetch | Works anywhere, no extra deps |
 | Reel | Hyperframes (HTML + GSAP compositions) | Edit graphics without rebuild |
 | Tests | Vitest + jsdom + RTL | Fast, ESM-native |
@@ -240,7 +240,7 @@ PORT=4175
 
 ## Known Limits
 
-- In-memory session state — reload loses transcripts (intentional for hackathon scope)
+- In-memory session state — reload loses transcripts (intentional for prototype scope)
 - Three anchors hardcoded in the UI; the personas system is parameterized but the layout assumes 3 lenses
 - No auth (localhost prototype)
 - Live-feed adapter is generic — needs configuration for a specific upstream

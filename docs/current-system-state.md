@@ -1,6 +1,6 @@
 # Current System State
 
-Generated from code inspection on 2026-04-10 for `/home/anokitv/anoubhav/live_avatar`.
+Generated from code inspection on 2026-04-10.
 
 ## Executive summary
 
