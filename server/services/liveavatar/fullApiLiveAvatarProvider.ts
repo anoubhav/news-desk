@@ -179,23 +179,16 @@ export class FullApiLiveAvatarProvider implements FullModeProvider {
     throw new Error(`Missing avatar id for ${profile.id}; provide LIVEAVATAR_${profile.id.toUpperCase()}_AVATAR_ID`);
   }
 
-  private async resolveVoiceId(profile: AnchorProfile, apiKey: string) {
+  private async resolveVoiceId(profile: AnchorProfile, _apiKey: string) {
+    // Only use an explicit env-configured voiceId. When none is set, return
+    // undefined so the provider does not send `voice_id` and the avatar's
+    // intrinsic (avatar-bundled) voice is used. Previously this fell back to
+    // matching `voiceFallbackNames` or any English voice — which sometimes
+    // produced gender-mismatched voices (e.g. a masculine voice for Avery).
     if (clipValue(profile.runtime.voiceId)) {
       return profile.runtime.voiceId;
     }
-
-    const voices = await this.listVoices(apiKey);
-    const preferred = profile.runtime.voiceFallbackNames;
-
-    for (const preferredName of preferred) {
-      const match = voices.find((voice) => voice.name === preferredName);
-      if (match) {
-        return match.id;
-      }
-    }
-
-    const englishVoice = voices.find((voice) => voice.language === "en");
-    return englishVoice?.id;
+    return undefined;
   }
 
   private async resolveContextId(profile: AnchorProfile, apiKey: string) {

@@ -47,6 +47,8 @@ import { attachHighlightRecorder, type HighlightRecorder } from "./lib/highlight
 const playbackDelayMs = 80;
 const defaultArticlePrompt =
   "Tell me the story in a clear, engaging way. Lead with the main development, explain why it matters, and end with what to watch next.";
+const autoStartArticlePrompt =
+  "Tell me the story, then debate it — have Maya frame the left's take and Cole respond from the right.";
 const defaultPanelPrompt = "What changed?";
 const voiceReleaseGraceMs = 600;
 
@@ -342,6 +344,7 @@ export default function App() {
   const liveRefreshInFlightRef = useRef<Promise<void> | null>(null);
   const storyPacketRef = useRef<StoryPacket | null>(null);
   const didAutoLoadArticleRef = useRef(false);
+  const didAutoStartArticleRef = useRef(false);
   const sessionsRef = useRef<Record<AnchorId, AnchorSession> | null>(null);
   const sourceModeRef = useRef<SourceType>("demo_story");
   const selectedAnchorsRef = useRef<AnchorId[]>(["neutral"]);
@@ -1982,12 +1985,33 @@ export default function App() {
       const nextSourceMode: SourceType = "article";
       sourceModeRef.current = nextSourceMode;
       setSourceMode("article");
-      setSelectedAnchors(payload.selectedAnchors);
-      selectedAnchorsRef.current = payload.selectedAnchors;
+      // The server's loadArticle response returns its conservative default
+      // anchor selection (just "neutral"). We keep the client's multi-anchor
+      // roster (neutral + left + right) so the desk shows all three viewpoints
+      // from the first turn, then sync sessions so the server agrees.
+      const availableIds = new Set(anchors.map((profile) => profile.id));
+      const clientPreferred = selectedAnchorsRef.current.filter((id) => availableIds.has(id));
+      const shouldKeepClientSelection =
+        clientPreferred.length > payload.selectedAnchors.length;
+      const resolvedSelected = shouldKeepClientSelection
+        ? clientPreferred
+        : payload.selectedAnchors;
+      setSelectedAnchors(resolvedSelected);
+      selectedAnchorsRef.current = resolvedSelected;
       setSessions(payload.sessions);
       setStoryPacket(payload.storyPacket);
       setArticleUrl(payload.storyPacket.sourceUrl ?? trimmedUrl);
       setViewerPrompt(defaultArticlePrompt);
+      if (shouldKeepClientSelection) {
+        try {
+          const syncPayload = await api.syncSessions({ selectedAnchors: resolvedSelected });
+          setSessions(syncPayload.sessions);
+          setSelectedAnchors(syncPayload.selectedAnchors);
+          selectedAnchorsRef.current = syncPayload.selectedAnchors;
+        } catch (syncError) {
+          console.warn("[app] syncSessions after article load failed", syncError);
+        }
+      }
     } catch (error) {
       setArticleError(error instanceof Error ? error.message : "Article loading failed.");
     } finally {
@@ -2015,6 +2039,23 @@ export default function App() {
     void handleLoadArticle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, anchors.length]);
+
+  useEffect(() => {
+    if (import.meta.env.MODE === "test") return;
+    if (didAutoStartArticleRef.current) return;
+    if (!didAutoLoadArticleRef.current) return;
+    if (loadingArticle) return;
+    if (storyPacket?.sourceType !== "article") return;
+    if (sourceMode !== "article") return;
+    if (selectedAnchors.length === 0) return;
+    if (busy || activeQuestion) return;
+    didAutoStartArticleRef.current = true;
+    const timer = setTimeout(() => {
+      void handleRunPrompt(autoStartArticlePrompt);
+    }, 400);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storyPacket, sourceMode, loadingArticle, selectedAnchors.length, busy, activeQuestion]);
 
   async function handleRunPrompt(prompt: string) {
     const nextPrompt = prompt.trim() || getDefaultPrompt(sourceMode);
