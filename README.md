@@ -4,6 +4,14 @@
 
 ![liveavatar](https://img.shields.io/badge/LiveAvatar-FULL-7C5CFC) ![status](https://img.shields.io/badge/status-prototype-blue)
 
+## 2-minute demo
+
+<p align="center">
+  <video src="demo.mp4" controls width="720" muted></video>
+</p>
+
+> If the video doesn't play inline on your viewer, **[download / open `demo.mp4`](demo.mp4)** (16 MB).
+
 ## Why
 
 Tuning into Fox News, MSNBC, or a late-night show on the same headline can make the same story sound like three completely different stories. That fragmentation traps audiences in echo chambers — only ever hearing the version of a story that flatters their priors. Election Desk puts every side on one screen, debating each other in real time, with citations.
