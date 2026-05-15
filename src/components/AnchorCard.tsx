@@ -39,6 +39,10 @@ const VERDICT_LABEL: Record<ClaimVerdict, string> = {
 };
 
 function AnchorFactCheckOverlay({ state }: { state: FactCheckCardState }) {
+  // Hidden: the per-tile broadcast overlay covered the speaker's face
+  // even after repositioning. Fact-check still surfaces in the side panel.
+  return null;
+  // eslint-disable-next-line no-unreachable
   if (state.status === "loading") {
     return (
       <motion.aside
