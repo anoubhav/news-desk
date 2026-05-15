@@ -13,7 +13,7 @@ For scene-by-scene visual direction (color, motion, typography, transitions) see
 ### [00:00 – 00:15]  COLD OPEN — The fragmentation problem
 **ON SCREEN:** Triple split — Fox-style red graphic, MSNBC-style blue graphic, late-night-style yellow — all running the **same headline** with three opposite framings. Audio of overlapping anchors fades up then out.
 **YOU:**
-> "When I switch from Fox to MSNBC to a late-night show, the same story can feel like three different countries. We're stuck in echo chambers."
+> "When I switch from Fox to MSNBC to a late-night show, the same story can sound like three completely different stories. We're stuck in echo chambers."
 
 ### [00:15 – 00:30]  THE FIX
 **ON SCREEN:** The three split-screens collapse into one — the Election Desk app, three avatar tiles lit, breaking bar pulsing.

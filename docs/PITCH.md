@@ -2,7 +2,7 @@
 
 ## The 90-second spoken pitch
 
-> "When I switch from Fox to MSNBC to a late-night show, the same story can feel like three different countries. We're stuck in echo chambers. So I built **LiveAvatar Election Desk** — three AI anchors on one screen: a left-leaning analyst, a right-leaning analyst, and a neutral moderator.
+> "When I switch from Fox to MSNBC to a late-night show, the same story can sound like three completely different stories. We're stuck in echo chambers. So I built **LiveAvatar Election Desk** — three AI anchors on one screen: a left-leaning analyst, a right-leaning analyst, and a neutral moderator.
 >
 > You drop in any article URL — or pull from an RSS feed, or a live news feed. The desk reads it, generates left and right framings, and the panel debates it on camera. The avatars are powered by **LiveAvatar in FULL mode** — real WebRTC video, sub-second response time, separate sessions per anchor.
 >
@@ -29,7 +29,7 @@
 
 ## The "why this matters" beats
 
-1. **The news ecosystem is fragmented.** Fox, MSNBC, and late-night feel like three different countries on the same headline. Audiences live in echo chambers because there's no single surface that puts every side together. Election Desk *is* that surface.
+1. **The news ecosystem is fragmented.** Fox, MSNBC, and late-night make the same headline sound like three completely different stories. Audiences live in echo chambers because there's no single surface that puts every side together. Election Desk *is* that surface.
 2. **News today is built for one side at a time.** This shows the same story from three angles, simultaneously, on camera.
 3. **Avatars usually monologue.** This one orchestrates a debate where anchors actually respond to each other, with a paraphrase guard to keep the substance moving.
 4. **Hallucination is the elephant.** Real-time fact-check with cited sources turns the desk from "AI talking heads" into "AI talking heads with a fact-checker on staff."

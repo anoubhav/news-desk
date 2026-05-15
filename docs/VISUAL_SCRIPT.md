@@ -10,10 +10,10 @@ For the spoken script (no visual direction) see [DEMO_SCRIPT.md](DEMO_SCRIPT.md)
 
 ---
 
-## SCENE 1 — Cold Open: "Three different countries" (00:00 – 00:15)
+## SCENE 1 — Cold Open: "Same story, three sides" (00:00 – 00:15)
 
 **VOICEOVER (you):**
-> "When I switch from Fox to MSNBC to a late-night show, the same story can feel like three different countries. We're stuck in echo chambers."
+> "When I switch from Fox to MSNBC to a late-night show, the same story can sound like three completely different stories. We're stuck in echo chambers."
 
 **ON-SCREEN ACTION:**
 - **0:00** — Black frame. Faint TV-static audio bed.

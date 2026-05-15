@@ -6,7 +6,7 @@
 
 ## Why
 
-Tuning into Fox News, MSNBC, or a late-night show on the same headline can feel like watching three different countries. That fragmentation traps audiences in echo chambers — only ever hearing the version of a story that flatters their priors. Election Desk puts every side on one screen, debating each other in real time, with citations.
+Tuning into Fox News, MSNBC, or a late-night show on the same headline can make the same story sound like three completely different stories. That fragmentation traps audiences in echo chambers — only ever hearing the version of a story that flatters their priors. Election Desk puts every side on one screen, debating each other in real time, with citations.
 
 ## What it does
 
