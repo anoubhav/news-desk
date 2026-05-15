@@ -174,6 +174,13 @@ export function ControlPanel({
                 className={`toggle-chip ${sourceMode === mode ? "toggle-chip-selected" : ""}`}
                 onClick={() => onSourceModeChange(mode)}
                 disabled={disabled}
+                title={
+                  mode === "demo_story"
+                    ? "Use one of the built-in demo stories — fastest way to try the desk."
+                    : mode === "article"
+                      ? "Paste a public article URL and have the desk discuss it."
+                      : "Pull the latest live news packet from the backend feed."
+                }
               >
                 {mode === "demo_story" ? "Demo" : mode === "article" ? "Article" : "Live"}
               </button>
@@ -193,6 +200,7 @@ export function ControlPanel({
                 type="button"
                 className={`toggle-chip ${selected ? "toggle-chip-selected" : ""}`}
                 onClick={() => onToggleAnchor(profile.id)}
+                title={selected ? `Remove ${profile.label} from the desk.` : `Add ${profile.label} to the desk for this session.`}
               >
                 {profile.shortLabel}
               </button>
@@ -216,6 +224,7 @@ export function ControlPanel({
             className="primary-action start-stage-button"
             onClick={onStartStage}
             disabled={(sourceMode === "article" && !articleReady) || controlsBusy}
+            title="Spin up the selected presenters and open the live avatar stage."
           >
             {connecting ? "Preparing stage…" : "Start stage"}
           </button>
@@ -236,10 +245,17 @@ export function ControlPanel({
               value={articleUrl}
               placeholder="https://example.com/article"
               onChange={(event) => onArticleUrlChange(event.target.value)}
+              title="Paste a public article URL — the desk will read it before answering."
             />
             {articleError ? <p className="control-error">{articleError}</p> : null}
             <div className="control-actions">
-              <button type="button" className="primary-action" onClick={onLoadArticle} disabled={loadingArticle}>
+              <button
+                type="button"
+                className="primary-action"
+                onClick={onLoadArticle}
+                disabled={loadingArticle}
+                title="Fetch the article at this URL and use it as the story for the desk."
+              >
                 {loadingArticle ? "Loading article…" : "Load article"}
               </button>
             </div>
@@ -279,6 +295,7 @@ export function ControlPanel({
                 type="button"
                 className={`story-chip ${story.id === currentStoryId ? "story-chip-active" : ""}`}
                 onClick={() => onSelectStory(story.id)}
+                title={`Use "${story.title}" as the story for this desk session.`}
               >
                 <span>{story.title}</span>
                 <small>{story.event_time_window}</small>
@@ -299,6 +316,7 @@ export function ControlPanel({
                 className={`toggle-chip ${activeModelPreset === "default" ? "toggle-chip-selected" : ""}`}
                 onClick={() => handleModelPresetChange("default")}
                 aria-pressed={activeModelPreset === "default"}
+                title="Use the default fast model — quicker responses that fit the avatar's speaking window."
               >
                 Default
               </button>
@@ -324,6 +342,15 @@ export function ControlPanel({
                       className={`toggle-chip ${activeReasoningEffort === effort ? "toggle-chip-selected" : ""}`}
                       onClick={() => handleReasoningEffortChange(effort)}
                       aria-pressed={activeReasoningEffort === effort}
+                      title={
+                        effort === "low"
+                          ? "Use low reasoning effort: fastest answers, least deliberation."
+                          : effort === "medium"
+                            ? "Use medium reasoning effort: balanced thinking time and speed."
+                            : effort === "high"
+                              ? "Use high reasoning effort: deeper thinking, slower replies."
+                              : "Use maximum reasoning effort: deepest thinking, longest delays."
+                      }
                     >
                       {effort[0].toUpperCase() + effort.slice(1)}
                     </button>
@@ -340,6 +367,13 @@ export function ControlPanel({
                   type="button"
                   className={`toggle-chip ${debateConfig.tone === tone ? "toggle-chip-selected" : ""}`}
                   onClick={() => onDebateToneChange(tone)}
+                  title={
+                    tone === "calm"
+                      ? "Use a calm debate tone: measured, low-heat, deliberate."
+                      : tone === "balanced"
+                        ? "Use a balanced debate tone: even-handed, no rhetoric."
+                        : "Use an aggressive debate tone: punchy, opinionated, confrontational."
+                  }
                 >
                   {tone[0].toUpperCase() + tone.slice(1)}
                 </button>
@@ -355,6 +389,7 @@ export function ControlPanel({
                   className={`toggle-chip ${debateConfig.debateRounds === roundCount ? "toggle-chip-selected" : ""}`}
                   onClick={() => onDebateRoundsChange(roundCount)}
                   aria-pressed={debateConfig.debateRounds === roundCount}
+                  title={`Run ${roundCount} back-and-forth round${roundCount === 1 ? "" : "s"} between the selected presenters.`}
                 >
                   {roundCount}
                 </button>
@@ -363,11 +398,15 @@ export function ControlPanel({
 
             {debateConfig.debateRounds > 1 && selectedAnchors.length >= 3 ? (
               <div className="moderator-beat-row">
-                <label className="moderator-beat-toggle">
+                <label
+                  className="moderator-beat-toggle"
+                  title="Insert a brief moderator turn between rounds when three or more presenters are on stage."
+                >
                   <input
                     type="checkbox"
                     checked={debateConfig.includeModeratorBeat}
                     onChange={(event) => onModeratorBeatChange(event.target.checked)}
+                    title="Insert a brief moderator turn between rounds when three or more presenters are on stage."
                   />
                   <span>Moderator beat between rounds</span>
                 </label>
@@ -375,8 +414,11 @@ export function ControlPanel({
             ) : null}
 
             {selectedAnchors.length > 1 ? (
-              <details className="conversation-advanced">
-                <summary>Advanced order</summary>
+              <details
+                className="conversation-advanced"
+                title="Open advanced controls for choosing which presenter speaks first."
+              >
+                <summary title="Open advanced controls for choosing which presenter speaks first.">Advanced order</summary>
                 <div className="prompt-composer">
                   <label>Opening speaker</label>
                   <div className="toggle-row">
@@ -384,6 +426,7 @@ export function ControlPanel({
                       type="button"
                       className={`toggle-chip ${debateConfig.openingSpeaker === "auto" ? "toggle-chip-selected" : ""}`}
                       onClick={() => onOpeningSpeakerChange("auto")}
+                      title="Let the desk pick who speaks first based on the question."
                     >
                       Auto
                     </button>
@@ -396,6 +439,7 @@ export function ControlPanel({
                           type="button"
                           className={`toggle-chip ${debateConfig.openingSpeaker === profile.id ? "toggle-chip-selected" : ""}`}
                           onClick={() => onOpeningSpeakerChange(profile.id)}
+                          title={`Have ${profile.label} open the conversation.`}
                         >
                           {profile.shortLabel}
                         </button>
@@ -419,8 +463,12 @@ export function ControlPanel({
             if (!profile) return null;
 
             return (
-              <details key={anchorId} className="session-card">
-                <summary>
+              <details
+                key={anchorId}
+                className="session-card"
+                title={`Expand to see ${profile.label}'s live session status and runtime details.`}
+              >
+                <summary title={`Expand to see ${profile.label}'s live session status and runtime details.`}>
                   <div>
                     <strong>{profile.label}</strong>
                     <span>{selectedAnchors.includes(anchorId) ? "Selected" : "Standby"}</span>

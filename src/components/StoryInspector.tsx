@@ -157,7 +157,12 @@ function renderDetailState(sourceMode: SourceType, storyPacket: StoryPacket | nu
               {storyPacket.sourcePublishedAt ? <li>Published: {storyPacket.sourcePublishedAt}</li> : null}
               {storyPacket.sourceUrl ? (
                 <li>
-                  <a href={storyPacket.sourceUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={storyPacket.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Open the original article in a new browser tab."
+                  >
                     Open source article
                   </a>
                 </li>
@@ -181,8 +186,13 @@ function renderDetailState(sourceMode: SourceType, storyPacket: StoryPacket | nu
         </div>
 
         {storyPacket.source_evidence.length > 0 ? (
-          <details className="detail-card">
-            <summary>Source evidence ({storyPacket.source_evidence.length})</summary>
+          <details
+            className="detail-card"
+            title="Expand to see the news clips and notes that grounded the desk's framing of this article."
+          >
+            <summary title="Expand to see the news clips and notes that grounded the desk's framing of this article.">
+              Source evidence ({storyPacket.source_evidence.length})
+            </summary>
             <div className="detail-card-body">
               <div className="evidence-list">
                 {storyPacket.source_evidence.map((evidence) => (
@@ -199,8 +209,13 @@ function renderDetailState(sourceMode: SourceType, storyPacket: StoryPacket | nu
         ) : null}
 
         {(storyPacket.articleSnippets ?? []).length > 0 ? (
-          <details className="detail-card">
-            <summary>Extracted snippets ({storyPacket.articleSnippets?.length ?? 0})</summary>
+          <details
+            className="detail-card"
+            title="Expand to see short passages pulled directly from the loaded article."
+          >
+            <summary title="Expand to see short passages pulled directly from the loaded article.">
+              Extracted snippets ({storyPacket.articleSnippets?.length ?? 0})
+            </summary>
             <div className="detail-card-body">
               <div className="evidence-list">
                 {(storyPacket.articleSnippets ?? []).map((snippet, index) => (
@@ -215,8 +230,11 @@ function renderDetailState(sourceMode: SourceType, storyPacket: StoryPacket | nu
         ) : null}
 
         {storyPacket.articleBody ? (
-          <details className="detail-card">
-            <summary>Article excerpt</summary>
+          <details
+            className="detail-card"
+            title="Expand to read a longer excerpt of the loaded article body."
+          >
+            <summary title="Expand to read a longer excerpt of the loaded article body.">Article excerpt</summary>
             <div className="detail-card-body">
               <p className="article-body-preview">{storyPacket.articleBody}</p>
             </div>
@@ -288,8 +306,13 @@ function renderDetailState(sourceMode: SourceType, storyPacket: StoryPacket | nu
         </article>
       </div>
 
-      <details className="detail-card">
-        <summary>Source evidence ({storyPacket.source_evidence.length})</summary>
+      <details
+        className="detail-card"
+        title="Expand to see the news clips and notes that shaped the desk's view of this story."
+      >
+        <summary title="Expand to see the news clips and notes that shaped the desk's view of this story.">
+          Source evidence ({storyPacket.source_evidence.length})
+        </summary>
         <div className="detail-card-body">
           <div className="evidence-list">
             {storyPacket.source_evidence.map((evidence) => (

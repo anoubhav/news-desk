@@ -91,6 +91,7 @@ export function HighlightReelPanel({
           className="primary-button"
           onClick={handleRender}
           disabled={state.kind === "rendering"}
+          title="Stitch the desk's recorded turns into a short highlight video you can download."
         >
           {state.kind === "rendering" ? "Rendering…" : state.kind === "ready" ? "Re-render" : "Generate highlights"}
         </button>
@@ -109,7 +110,7 @@ export function HighlightReelPanel({
           <video src={state.mp4Url} controls autoPlay className="highlight-reel-video" />
           <div className="highlight-reel-meta">
             <span>Rendered in {(state.renderMs / 1000).toFixed(1)}s</span>
-            <a href={state.mp4Url} download>Download MP4</a>
+            <a href={state.mp4Url} download title="Save the rendered highlight reel as an MP4 video file.">Download MP4</a>
           </div>
         </div>
       ) : null}

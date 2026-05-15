@@ -49,6 +49,42 @@ const defaultArticlePrompt =
   "Tell me the story in a clear, engaging way. Lead with the main development, explain why it matters, and end with what to watch next.";
 const defaultPanelPrompt = "What changed?";
 const voiceReleaseGraceMs = 600;
+
+type ArticlePreset = { id: string; label: string; url: string };
+
+const articlePresets: ArticlePreset[] = [
+  {
+    id: "trump-election-quote",
+    label: "Trump: \"We shouldn't even have an election\"",
+    url: "https://www.yahoo.com/news/articles/trump-tells-reuters-shouldn-t-174029491.html",
+  },
+  {
+    id: "npr-senate-2026",
+    label: "NPR — 2026 Senate races to watch",
+    url: "https://www.npr.org/2026/05/02/nx-s1-5806271/2026-midterm-elections-control-senate-race",
+  },
+  {
+    id: "pbs-midterm-takeaways",
+    label: "PBS — Takeaways from the first 2026 midterm elections",
+    url: "https://www.pbs.org/newshour/politics/takeaways-from-the-first-elections-of-2026-midterms",
+  },
+];
+
+const defaultArticlePreset = articlePresets[0];
+
+function prettifyArticleUrl(url: string): string {
+  if (!url) return "No article";
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    const pathSegments = parsed.pathname.split("/").filter(Boolean);
+    const tail = pathSegments[pathSegments.length - 1] ?? "";
+    const trimmedTail = tail.length > 24 ? `${tail.slice(0, 22)}…` : tail;
+    return trimmedTail ? `${host}/…/${trimmedTail}` : host;
+  } catch {
+    return url.length > 40 ? `${url.slice(0, 38)}…` : url;
+  }
+}
 const defaultDebateConfig: DebateConfig = {
   tone: "balanced",
   openingSpeaker: "auto",
@@ -234,11 +270,12 @@ export default function App() {
   const [anchors, setAnchors] = useState<AnchorProfile[]>([]);
   const [anchorRuntimeStatus, setAnchorRuntimeStatus] = useState<Record<AnchorId, AnchorRuntimeStatus> | null>(null);
   const [sessions, setSessions] = useState<Record<AnchorId, AnchorSession> | null>(null);
-  const [selectedAnchors, setSelectedAnchors] = useState<AnchorId[]>(["neutral"]);
+  const [selectedAnchors, setSelectedAnchors] = useState<AnchorId[]>(["neutral", "left", "right"]);
   const [stories, setStories] = useState<StoryPacket[]>([]);
   const [storyPacket, setStoryPacket] = useState<StoryPacket | null>(null);
   const [sourceMode, setSourceMode] = useState<SourceType>("demo_story");
-  const [articleUrl, setArticleUrl] = useState("");
+  const [articleUrl, setArticleUrl] = useState(defaultArticlePreset.url);
+  const [articlePresetId, setArticlePresetId] = useState<string>(defaultArticlePreset.id);
   const [articleError, setArticleError] = useState<string | null>(null);
   const [loadingArticle, setLoadingArticle] = useState(false);
   const [liveFeedEnabled, setLiveFeedEnabled] = useState(false);
@@ -304,6 +341,7 @@ export default function App() {
   );
   const liveRefreshInFlightRef = useRef<Promise<void> | null>(null);
   const storyPacketRef = useRef<StoryPacket | null>(null);
+  const didAutoLoadArticleRef = useRef(false);
   const sessionsRef = useRef<Record<AnchorId, AnchorSession> | null>(null);
   const sourceModeRef = useRef<SourceType>("demo_story");
   const selectedAnchorsRef = useRef<AnchorId[]>(["neutral"]);
@@ -733,11 +771,18 @@ export default function App() {
           bootstrap.availableStories[0]?.id ??
           (bootstrap.storyPacket?.sourceType === "demo_story" ? bootstrap.storyPacket.id : "");
 
+        const availableAnchorIds = new Set(bootstrap.anchors.map((entry) => entry.id));
+        const desiredAnchorIds = (["neutral", "left", "right"] as AnchorId[]).filter((id) =>
+          availableAnchorIds.has(id),
+        );
+        const initialSelectedAnchors =
+          desiredAnchorIds.length > 0 ? desiredAnchorIds : bootstrap.selectedAnchors;
+
         setAnchors(bootstrap.anchors);
         setAnchorRuntimeStatus(bootstrap.anchorRuntimeStatus);
         setSessions(bootstrap.sessions);
-        setSelectedAnchors(bootstrap.selectedAnchors);
-        selectedAnchorsRef.current = bootstrap.selectedAnchors;
+        setSelectedAnchors(initialSelectedAnchors);
+        selectedAnchorsRef.current = initialSelectedAnchors;
         setStories(bootstrap.availableStories);
         setStoryPacket(bootstrap.storyPacket);
         setProviderMode(bootstrap.providerMode);
@@ -746,7 +791,13 @@ export default function App() {
         setLiveFeedEnabled(bootstrap.liveFeedEnabled);
         setLiveFeedPollMs(bootstrap.liveFeedPollMs);
         setDemoStoryId(initialDemoStory);
-        setArticleUrl(bootstrap.storyPacket?.sourceUrl ?? "");
+        const seedArticleUrl =
+          bootstrap.storyPacket?.sourceType === "article" && bootstrap.storyPacket.sourceUrl
+            ? bootstrap.storyPacket.sourceUrl
+            : defaultArticlePreset.url;
+        setArticleUrl(seedArticleUrl);
+        const matchingPreset = articlePresets.find((preset) => preset.url === seedArticleUrl);
+        setArticlePresetId(matchingPreset?.id ?? "custom");
         setViewerPrompt(getDefaultPrompt(bootstrap.sourceMode));
         setLiveStatus({
           ...bootstrap.liveStatus,
@@ -1944,6 +1995,27 @@ export default function App() {
     }
   }
 
+  function handleArticlePresetChange(nextPresetId: string) {
+    setArticlePresetId(nextPresetId);
+    const preset = articlePresets.find((entry) => entry.id === nextPresetId);
+    if (preset) {
+      setArticleUrl(preset.url);
+      setArticleError(null);
+    }
+  }
+
+  useEffect(() => {
+    if (import.meta.env.MODE === "test") return;
+    if (didAutoLoadArticleRef.current) return;
+    if (loading) return;
+    if (anchors.length === 0) return;
+    if (!articleUrl.trim()) return;
+    if (storyPacket?.sourceType === "article" && storyPacket.sourceUrl === articleUrl) return;
+    didAutoLoadArticleRef.current = true;
+    void handleLoadArticle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, anchors.length]);
+
   async function handleRunPrompt(prompt: string) {
     const nextPrompt = prompt.trim() || getDefaultPrompt(sourceMode);
     if (!storyPacket) {
@@ -2108,6 +2180,7 @@ export default function App() {
               onClick={() => {
                 window.location.reload();
               }}
+              title="Reload the page and try restarting the election desk."
             >
               Retry
             </button>
@@ -2221,24 +2294,70 @@ export default function App() {
           {stagePillLabel ? <span className="top-bar-chip">{stagePillLabel}</span> : null}
         </div>
         <div className="top-bar-actions">
+          <div
+            className="article-pill"
+            title="Pick a preset article or open Setup to paste your own URL, then click Load to bring it onto the desk."
+          >
+            <span className="article-pill-label">Article</span>
+            <select
+              className="article-pill-select"
+              value={articlePresetId}
+              onChange={(event) => handleArticlePresetChange(event.target.value)}
+              disabled={loadingArticle}
+              title="Choose a sample US election article — the desk will discuss it from left, right, and neutral angles."
+              aria-label="Choose article preset"
+            >
+              {articlePresets.map((preset) => (
+                <option key={preset.id} value={preset.id} title={preset.url}>
+                  {preset.label}
+                </option>
+              ))}
+              {articlePresetId === "custom" ? <option value="custom">Custom URL</option> : null}
+            </select>
+            <span className="article-pill-url" title={articleUrl || "No article URL set"}>
+              {prettifyArticleUrl(articleUrl)}
+            </span>
+            <button
+              type="button"
+              className="article-pill-btn"
+              onClick={handleLoadArticle}
+              disabled={loadingArticle || !articleUrl.trim()}
+              title="Fetch this article and switch the desk into article mode so anchors can discuss it."
+            >
+              {loadingArticle ? "Loading…" : "Load"}
+            </button>
+            <button
+              type="button"
+              className="article-pill-btn article-pill-btn-ghost"
+              onClick={() => setSetupOpen(true)}
+              title="Open Setup to paste a different article URL or change other desk settings."
+            >
+              Change
+            </button>
+          </div>
           <button
             type="button"
             className={`icon-button ${chromaKeyEnabled ? "icon-button-primary" : ""}`}
             onClick={() => setChromaKeyEnabled((v) => !v)}
             aria-pressed={chromaKeyEnabled}
             aria-label={chromaKeyEnabled ? "Disable newsroom backdrop" : "Enable newsroom backdrop"}
-            title={chromaKeyEnabled ? "Newsroom backdrop on" : "Newsroom backdrop off"}
+            title={
+              chromaKeyEnabled
+                ? "Newsroom backdrop is on. Click to hide it and show the avatar against its raw background."
+                : "Newsroom backdrop is off. Click to drop avatars onto a newsroom backdrop."
+            }
           >
             ▣
           </button>
           <button
             type="button"
-            className="icon-button icon-button-primary"
+            className="icon-button icon-button-primary icon-button-with-label"
             onClick={() => setSetupOpen(true)}
             aria-label="Open setup and context"
-            title="Setup & context"
+            title="Setup: choose anchors, swap the article, tune conversation style, and check session status."
           >
-            ⚙
+            <span aria-hidden>⚙</span>
+            <span className="icon-button-label">Setup</span>
           </button>
         </div>
       </header>
@@ -2255,6 +2374,7 @@ export default function App() {
                     type="button"
                     className={`anchor-tab anchor-tab-${profile.id} ${activeSpeaker === profile.id ? "anchor-tab-selected" : ""}`}
                     onClick={() => handleToggleAnchor(profile.id)}
+                    title={`Switch focus to ${profile.label}. Click again to take ${profile.shortLabel} off stage.`}
                   >
                     {profile.shortLabel}
                   </button>
@@ -2341,6 +2461,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.92, y: -6 }}
             transition={{ type: "spring", stiffness: 280, damping: 26 }}
             aria-label={`Open response feed (${turnCount} turns)`}
+            title="Open the response feed to review every turn the desk has produced."
           >
             <span className="feed-pill-count">{turnCount}</span>
             <span>turns</span>
@@ -2369,7 +2490,7 @@ export default function App() {
                 className="icon-button"
                 onClick={() => setFeedOpen(false)}
                 aria-label="Close response feed"
-                title="Close"
+                title="Close the response feed."
               >
                 ✕
               </button>
@@ -2422,7 +2543,7 @@ export default function App() {
                   className="icon-button"
                   onClick={() => setSetupOpen(false)}
                   aria-label="Close setup"
-                  title="Close"
+                  title="Close Setup."
                 >
                   ✕
                 </button>

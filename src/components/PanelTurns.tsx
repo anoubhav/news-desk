@@ -113,6 +113,7 @@ export function PanelTurns({ conversations, activeQuestionId, anchors, factCheck
                   onClick={toggle}
                   aria-expanded={isExpanded}
                   aria-controls={`conversation-body-${conversation.id}`}
+                  title={isExpanded ? "Collapse this question to hide the presenters' replies." : "Expand this question to see the presenters' replies."}
                 >
                   <header className="turn-card-header">
                     <div>
@@ -189,8 +190,12 @@ export function PanelTurns({ conversations, activeQuestionId, anchors, factCheck
                           ) : null}
 
                           {shouldRenderFactCheck(factChecks?.get(turn.turnId)) ? (
-                            <details className="turn-detail turn-detail-factcheck" open>
-                              <summary>Live fact-check</summary>
+                            <details
+                              className="turn-detail turn-detail-factcheck"
+                              open
+                              title="Expand to see the live fact-check verdict and sources for this reply."
+                            >
+                              <summary title="Expand to see the live fact-check verdict and sources for this reply.">Live fact-check</summary>
                               <div className="turn-detail-body">
                                 <FactCheckCard state={factChecks?.get(turn.turnId)} />
                               </div>
@@ -198,8 +203,11 @@ export function PanelTurns({ conversations, activeQuestionId, anchors, factCheck
                           ) : null}
 
                           {turn.sourceExcerpt || turn.citedEvidence.length > 0 ? (
-                            <details className="turn-detail">
-                              <summary>Why this answer</summary>
+                            <details
+                              className="turn-detail"
+                              title="Expand to see the source excerpts and evidence the presenter used for this reply."
+                            >
+                              <summary title="Expand to see the source excerpts and evidence the presenter used for this reply.">Why this answer</summary>
                               <div className="turn-detail-body">
                                 {turn.sourceExcerpt ? <p className="turn-source-excerpt">{turn.sourceExcerpt}</p> : null}
                                 {turn.citedEvidence.length > 0 ? (

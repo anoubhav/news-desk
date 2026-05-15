@@ -139,6 +139,7 @@ export function ComposerPanel({
             }}
             placeholder={placeholder}
             aria-label={sourceMode === "article" ? "Story prompt or follow-up" : "Prompt"}
+            title="Type your question for the presenters. Press Enter to send."
           />
         </div>
 
@@ -149,7 +150,7 @@ export function ComposerPanel({
               className="composer-button composer-button-interrupt"
               onClick={onInterruptTurn}
               whileTap={{ scale: 0.96 }}
-              title="Interrupt the current turn"
+              title="Cut the avatar off mid-sentence so you can ask the next question."
             >
               Interrupt turn
             </motion.button>
@@ -166,6 +167,7 @@ export function ComposerPanel({
               disabled={holdToTalkDisabled}
               aria-pressed={isListening}
               whileTap={{ scale: 0.94 }}
+              title="Press and hold to speak; release to submit your question to the desk."
             >
               {getHoldToTalkLabel(voiceCaptureState)}
             </motion.button>
@@ -177,6 +179,7 @@ export function ComposerPanel({
             onClick={() => onRunPrompt(viewerPrompt)}
             disabled={!canRunPrompt || promptDisabled}
             whileTap={{ scale: 0.97 }}
+            title="Send the typed question to the selected presenters."
           >
             {runButtonLabel}
           </motion.button>

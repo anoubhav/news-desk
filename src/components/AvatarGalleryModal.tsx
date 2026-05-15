@@ -453,10 +453,22 @@ export function AvatarGalleryModal({ open, onClose, anchors, onApplied }: Avatar
             </p>
           </div>
           <div className="avatar-gallery-header-actions">
-            <button type="button" className="secondary-action" onClick={autoPick} disabled={loading || avatars.length === 0 || savingAnchor !== null}>
+            <button
+              type="button"
+              className="secondary-action"
+              onClick={autoPick}
+              disabled={loading || avatars.length === 0 || savingAnchor !== null}
+              title="Automatically assign one avatar to each presenter, matching their preferred gender."
+            >
               Auto-pick 3
             </button>
-            <button type="button" className="ghost-action" onClick={handleClose} aria-label="Close avatar gallery">
+            <button
+              type="button"
+              className="ghost-action"
+              onClick={handleClose}
+              aria-label="Close avatar gallery"
+              title="Close the avatar picker."
+            >
               ✕
             </button>
           </div>
@@ -469,6 +481,13 @@ export function AvatarGalleryModal({ open, onClose, anchors, onApplied }: Avatar
               type="button"
               className={`toggle-chip ${genderFilter === option ? "toggle-chip-selected" : ""}`}
               onClick={() => setGenderFilter(option)}
+              title={
+                option === "all"
+                  ? "Show every avatar on this page."
+                  : option === "unknown"
+                    ? "Show only avatars whose gender couldn't be guessed from the name."
+                    : `Show only avatars guessed to be ${option}.`
+              }
             >
               {option === "all" ? "All" : option.charAt(0).toUpperCase() + option.slice(1)}
             </button>
@@ -519,6 +538,7 @@ export function AvatarGalleryModal({ open, onClose, anchors, onApplied }: Avatar
                         type="button"
                         className="ghost-action avatar-card-preview-btn"
                         onClick={() => void previewVoice(avatar)}
+                        title={isPreviewing ? "Stop the voice preview." : `Hear a short sample of ${avatar.name}'s voice.`}
                       >
                         {isPreviewing
                           ? previewStatus === "loading"
@@ -565,6 +585,7 @@ export function AvatarGalleryModal({ open, onClose, anchors, onApplied }: Avatar
               className="toggle-chip"
               onClick={() => fetchPage(Math.max(1, page - 1))}
               disabled={loading || page <= 1}
+              title="Go to the previous page of avatars."
             >
               ← Prev
             </button>
@@ -573,6 +594,7 @@ export function AvatarGalleryModal({ open, onClose, anchors, onApplied }: Avatar
               className="toggle-chip"
               onClick={() => fetchPage(page + 1)}
               disabled={loading || !hasNext}
+              title="Go to the next page of avatars."
             >
               Next →
             </button>
