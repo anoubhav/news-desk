@@ -690,7 +690,7 @@ details summary:focus-visible {
    outlets max) so it reads at glance distance like a chyron. */
 .anchor-factcheck-overlay {
   position: absolute;
-  top: 56px;
+  bottom: 80px;
   right: 14px;
   z-index: 4;
   max-width: 300px;
