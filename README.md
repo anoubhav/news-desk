@@ -7,10 +7,13 @@
 ## 2-minute demo
 
 <p align="center">
-  <video src="demo.mp4" controls width="720" muted></video>
+  <video src="demo-narrated.mp4" controls width="720"></video>
 </p>
 
-> If the video doesn't play inline on your viewer, **[download / open `demo.mp4`](demo.mp4)** (16 MB).
+> If the video doesn't play inline on your viewer, **[download / open `demo-narrated.mp4`](demo-narrated.mp4)** (18 MB, narrated with music).
+> A silent caption-only version is also available as **[`demo.mp4`](demo.mp4)** (16 MB).
+>
+> *Music: Gymnopédie No. 1 by Erik Satie, performed by Kevin MacLeod ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)). Voiceover generated with [Kokoro TTS](https://github.com/hexgrad/kokoro).*
 
 ## Why
 
