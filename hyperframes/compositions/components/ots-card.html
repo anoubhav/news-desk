@@ -1,0 +1,119 @@
+<!doctype html>
+<html
+  lang="en"
+  data-resolution="landscape"
+  data-composition-variables='[
+    {"id":"outlet","type":"string","label":"Outlet / source name","default":"REUTERS"},
+    {"id":"headline","type":"string","label":"Headline / citation text","default":"Three newsrooms confirm the same memo, sources still off the record."},
+    {"id":"label","type":"string","label":"Top label","default":"SOURCE"},
+    {"id":"accent","type":"color","label":"Accent color","default":"#E0B660"},
+    {"id":"side","type":"enum","label":"Card side","default":"right","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}]}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template id="ots-card-template">
+      <div
+        data-composition-id="ots-card"
+        data-width="1920"
+        data-height="1080"
+      >
+        <style>
+          [data-composition-id="ots-card"] {
+            position: absolute; inset: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+          }
+          [data-composition-id="ots-card"] .ots {
+            position: absolute;
+            top: 168px;
+            width: 540px;
+            background: rgba(10, 12, 18, 0.94);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+            opacity: 0;
+          }
+          [data-composition-id="ots-card"] .ots.left  { left: 80px; }
+          [data-composition-id="ots-card"] .ots.right { right: 80px; }
+          [data-composition-id="ots-card"] .head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 22px 8px 22px;
+          }
+          [data-composition-id="ots-card"] .label {
+            font-size: 16px; font-weight: 700; letter-spacing: 0.24em;
+            text-transform: uppercase;
+          }
+          [data-composition-id="ots-card"] .outlet {
+            font-size: 16px; font-weight: 800; letter-spacing: 0.18em;
+            color: #fff; text-transform: uppercase;
+          }
+          [data-composition-id="ots-card"] .headline {
+            font-size: 24px; font-weight: 600; line-height: 1.35;
+            padding: 6px 22px 22px 22px;
+            color: #f4f4f6;
+          }
+          [data-composition-id="ots-card"] .footer {
+            height: 6px;
+            transform-origin: left center;
+          }
+        </style>
+
+        <div class="ots clip" data-ots-root data-start="0" data-duration="6" data-track-index="0">
+          <div class="head">
+            <div class="label" data-ots-label></div>
+            <div class="outlet" data-ots-outlet></div>
+          </div>
+          <div class="headline" data-ots-headline></div>
+          <div class="footer" data-ots-footer></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            const defaults = {
+              outlet: "REUTERS",
+              headline: "Three newsrooms confirm the same memo, sources still off the record.",
+              label: "SOURCE",
+              accent: "#E0B660",
+              side: "right"
+            };
+            const root = document.querySelector('[data-composition-id="ots-card"]');
+            let overrides = {};
+            try {
+              if (typeof __hyperframes !== "undefined" && __hyperframes && __hyperframes.getVariables) overrides = __hyperframes.getVariables() || {};
+              else if (typeof window !== "undefined" && window.__hyperframes && window.__hyperframes.getVariables) overrides = window.__hyperframes.getVariables() || {};
+            } catch (_) {}
+            if (!overrides || Object.keys(overrides).length === 0) {
+              const host = root && root.closest("[data-composition-src]");
+              const raw = host && host.getAttribute("data-variable-values");
+              if (raw) { try { overrides = JSON.parse(raw) || {}; } catch (_) {} }
+            }
+            const vars = Object.assign({}, defaults, overrides);
+            const ots = root.querySelector(".ots");
+            ots.classList.add(vars.side === "left" ? "left" : "right");
+            ots.style.borderTop = "4px solid " + vars.accent;
+            const labelEl = root.querySelector("[data-ots-label]");
+            labelEl.textContent = vars.label;
+            labelEl.style.color = vars.accent;
+            root.querySelector("[data-ots-outlet]").textContent = vars.outlet;
+            root.querySelector("[data-ots-headline]").textContent = vars.headline;
+            const footer = root.querySelector("[data-ots-footer]");
+            footer.style.background = "linear-gradient(90deg, " + vars.accent + ", rgba(255,255,255,0.05))";
+
+            const fromX = vars.side === "left" ? -80 : 80;
+            const dur = 6;
+            window.__timelines = window.__timelines || {};
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo(ots, { x: fromX, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0)
+              .fromTo(footer, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, 0.2)
+              .to(ots, { x: fromX * 0.5, opacity: 0, duration: 0.4, ease: "power2.in" }, Math.max(0.9, dur - 0.4));
+            window.__timelines["ots-card"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+node_modules
+dist
+bin/cloudflared
+.DS_Store
+coverage
+.env.local
+.env.*.local
+
+# IDE / agent scaffolding
+.claude/
+.agents/
+.windsurf/
+skills-lock.json
+
+# Misc
+*.log
+.vscode/
+.idea/

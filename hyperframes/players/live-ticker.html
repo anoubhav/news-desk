@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px; height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Standalone wrapper composition that mounts the shared ticker component.
+      The components/ticker.html file uses a <template> wrapper (required for
+      sub-comp use in bundle mode), so the @hyperframes/player web component
+      cannot consume it directly. This wrapper exposes the ticker as a
+      top-level Player target — loaded via /hyperframes/live-ticker.html.
+
+      Long duration (10 min) so the player has plenty of timeline to play; the
+      ticker's internal GSAP timeline has repeat: -1 and loops indefinitely.
+    -->
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="600"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="el-ticker"
+        class="clip"
+        data-start="0"
+        data-duration="600"
+        data-track-index="0"
+        data-composition-id="ticker"
+        data-composition-src="../compositions/components/ticker.html"
+      ></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      // Stub root timeline so the lint registry check passes; the actual
+      // ticker animation lives inside components/ticker.html which registers
+      // window.__timelines["ticker"] when the sub-comp template mounts.
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html
+  lang="en"
+  data-resolution="landscape"
+  data-composition-variables='[
+    {"id":"label","type":"string","label":"Left badge text","default":"LATEST"},
+    {"id":"items","type":"string","label":"Pipe-separated ticker items","default":"Policy ruling expected | Markets watching closely | Three newsrooms cite the same memo | Sources still off the record"},
+    {"id":"accent","type":"color","label":"Badge accent color","default":"#E0B660"},
+    {"id":"speedSeconds","type":"number","label":"Seconds for one full loop","default":42}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template id="ticker-template">
+      <div
+        data-composition-id="ticker"
+        data-width="1920"
+        data-height="1080"
+      >
+        <style>
+          [data-composition-id="ticker"] {
+            position: absolute; inset: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+          }
+          [data-composition-id="ticker"] .ticker-wrap {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            height: 72px; display: flex; align-items: stretch;
+            background: rgba(8, 10, 14, 0.92);
+            backdrop-filter: blur(6px);
+            border-top: 2px solid rgba(255,255,255,0.06);
+            color: #fff;
+          }
+          [data-composition-id="ticker"] .badge {
+            flex: 0 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            padding: 0 28px;
+            font-weight: 800; font-size: 22px; letter-spacing: 0.16em;
+            color: #0b0d11;
+            background: #E0B660;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
+          }
+          [data-composition-id="ticker"] .crawl {
+            flex: 1 1 auto; position: relative; overflow: hidden;
+            display: flex; align-items: center;
+          }
+          [data-composition-id="ticker"] .track {
+            display: flex; flex-wrap: nowrap; white-space: nowrap;
+            will-change: transform;
+          }
+          [data-composition-id="ticker"] .track-half { display: flex; }
+          [data-composition-id="ticker"] .track-item {
+            font-size: 26px; font-weight: 500;
+            padding: 0 42px;
+            line-height: 72px;
+            color: #f4f4f6;
+            border-right: 1px solid rgba(255,255,255,0.18);
+          }
+          [data-composition-id="ticker"] .track-item .dot {
+            display: inline-block; width: 8px; height: 8px;
+            border-radius: 50%;
+            margin-right: 18px; vertical-align: middle;
+          }
+        </style>
+
+        <div class="ticker-wrap clip" data-ticker-root data-layout-allow-overflow data-start="0" data-duration="600" data-track-index="0">
+          <div class="badge" data-ticker-badge></div>
+          <div class="crawl">
+            <div class="track" data-ticker-track>
+              <div class="track-half" data-ticker-half-a></div>
+              <div class="track-half" data-ticker-half-b></div>
+            </div>
+          </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+        <script>
+          (function () {
+            const defaults = {
+              label: "LATEST",
+              items: "Policy ruling expected | Markets watching closely | Three newsrooms cite the same memo | Sources still off the record",
+              accent: "#E0B660",
+              speedSeconds: 42
+            };
+            const root = document.querySelector('[data-composition-id="ticker"]');
+            // Resolve variables: try the runtime API; fall back to host data-variable-values; merge over local defaults.
+            let overrides = {};
+            try {
+              if (typeof __hyperframes !== "undefined" && __hyperframes && __hyperframes.getVariables) {
+                overrides = __hyperframes.getVariables() || {};
+              } else if (typeof window !== "undefined" && window.__hyperframes && window.__hyperframes.getVariables) {
+                overrides = window.__hyperframes.getVariables() || {};
+              }
+            } catch (_) {}
+            if (!overrides || Object.keys(overrides).length === 0) {
+              const host = root && root.closest("[data-composition-src]");
+              const raw = host && host.getAttribute("data-variable-values");
+              if (raw) { try { overrides = JSON.parse(raw) || {}; } catch (_) {} }
+            }
+            const vars = Object.assign({}, defaults, overrides);
+            const wrap = root.querySelector(".ticker-wrap");
+            wrap.style.setProperty("--accent", vars.accent);
+            wrap.querySelector(".badge").style.background = vars.accent;
+            root.querySelector("[data-ticker-badge]").textContent = vars.label;
+
+            const items = String(vars.items).split("|").map(s => s.trim()).filter(Boolean);
+            function fillHalf(el) {
+              for (const text of items) {
+                const span = document.createElement("span");
+                span.className = "track-item";
+                const dot = document.createElement("span");
+                dot.className = "dot";
+                dot.style.background = vars.accent;
+                span.appendChild(dot);
+                span.appendChild(document.createTextNode(text));
+                el.appendChild(span);
+              }
+            }
+            fillHalf(root.querySelector("[data-ticker-half-a]"));
+            fillHalf(root.querySelector("[data-ticker-half-b]"));
+
+            window.__timelines = window.__timelines || {};
+            const tl = gsap.timeline({ paused: true, repeat: -1 });
+            tl.fromTo(
+              root.querySelector("[data-ticker-track]"),
+              { xPercent: 0 },
+              { xPercent: -50, duration: Math.max(8, Number(vars.speedSeconds) || 42), ease: "none" }
+            );
+            window.__timelines["ticker"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>
