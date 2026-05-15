@@ -89,8 +89,8 @@ describe("FullApiLiveAvatarProvider", () => {
     expect(neutralSession.sessionAccessToken).toBe("neutral-key-token");
     expect(leftSession.sessionAccessToken).toBe("left-key-token");
     expect(fetchCalls.filter((call) => call.apiKey === "neutral-key" && call.url.endsWith("/v1/contexts"))).toHaveLength(1);
-    // We no longer resolve voices via name fallback — the avatar's intrinsic
-    // voice is used when no env-configured voiceId is provided.
+    // /v1/voices is never fetched — each avatar carries its own bundled voice
+    // and we no longer override that with a name-based fallback.
     expect(fetchCalls.filter((call) => call.apiKey === "neutral-key" && call.url.endsWith("/v1/voices"))).toHaveLength(0);
     expect(fetchCalls.filter((call) => call.apiKey === "neutral-key" && call.url.endsWith("/v1/sessions/token"))).toHaveLength(2);
     expect(fetchCalls.filter((call) => call.apiKey === "left-key" && call.url.endsWith("/v1/contexts"))).toHaveLength(1);

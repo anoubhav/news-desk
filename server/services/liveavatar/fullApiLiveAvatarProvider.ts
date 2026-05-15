@@ -180,11 +180,13 @@ export class FullApiLiveAvatarProvider implements FullModeProvider {
   }
 
   private async resolveVoiceId(profile: AnchorProfile, _apiKey: string) {
-    // Only use an explicit env-configured voiceId. When none is set, return
-    // undefined so the provider does not send `voice_id` and the avatar's
-    // intrinsic (avatar-bundled) voice is used. Previously this fell back to
-    // matching `voiceFallbackNames` or any English voice — which sometimes
-    // produced gender-mismatched voices (e.g. a masculine voice for Avery).
+    // Each avatar is configured on the LiveAvatar platform with its own
+    // bundled voice (Avery and Maya feminine, Cole masculine). Trust the
+    // avatar id and don't override the voice unless the operator has set
+    // LIVEAVATAR_<ANCHOR>_VOICE_ID. We deliberately do NOT match by name
+    // against /v1/voices or fall back to any English voice — both of those
+    // can return a wrong-gender voice and the result depends on platform
+    // listing order.
     if (clipValue(profile.runtime.voiceId)) {
       return profile.runtime.voiceId;
     }
